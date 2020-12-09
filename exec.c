@@ -18,7 +18,7 @@ exec(char *path, char **argv)
   struct proghdr ph;
   pde_t *pgdir, *oldpgdir;
   struct proc *curproc = myproc();
-
+  ss = KERNBASE-4-2*PGSIZE;
   begin_op();
 
   if((ip = namei(path)) == 0){
@@ -49,7 +49,7 @@ exec(char *path, char **argv)
       goto bad;
     if(ph.vaddr + ph.memsz < ph.vaddr)
       goto bad;
-    if((sz = allocuvm(pgdir, sz, ph.vaddr + ph.memsz)) == 0)
+    if((sz = allocuvm(pgdir, sz, ph.vaddr + ph.memsz,ss)) == 0)
       goto bad;
     if(ph.vaddr % PGSIZE != 0)
       goto bad;
@@ -65,7 +65,7 @@ exec(char *path, char **argv)
 	
 sp = KERNBASE-4;/*word under kernbase*/
 ss = sp - 2*PGSIZE;
-if((allocuvm(pgdir, ss, ss + 2*PGSIZE)) == 0)
+if((allocuvm(pgdir, ss, ss + 2*PGSIZE,ss)) == 0)
   goto bad;
 clearpteu(pgdir, (char*)(sz - 2*PGSIZE));
   /*ss = sp; i think ss needs to be the bottom pg of the stack*/
