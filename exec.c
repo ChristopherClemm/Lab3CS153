@@ -68,6 +68,7 @@ ss = sp - 2*PGSIZE;
 if((allocuvm(pgdir, ss, ss + 2*PGSIZE)) == 0)
   goto bad;
 clearpteu(pgdir, (char*)(ss));
+//ss = ss + PGSIZE;
   /*ss = sp; i think ss needs to be the bottom pg of the stack*/
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
