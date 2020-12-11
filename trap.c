@@ -45,7 +45,7 @@ trap(struct trapframe *tf)
       exit();
     return;
   }
-//uint errorAccess = rcr2();
+    uint errorAccess = rcr2();
     struct proc *curproc = myproc();  
 
 
@@ -82,15 +82,15 @@ trap(struct trapframe *tf)
     break;
   case T_PGFLT:
 //	cprintf("myb");
-    //if((curproc->ss - PGSIZE <= errorAccess) && (curproc->ss >= errorAccess)){
+    if((curproc->ss - PGSIZE <= errorAccess) && (curproc->ss >= errorAccess)){
 	//cprintf("%d \n", curproc->ss);
-	clearpteu(curproc->pgdir,  (char*)curproc->ss);
+//	clearpteu(curproc->pgdir,  (char*)curproc->ss);
     	allocuvm(curproc->pgdir, curproc->ss - PGSIZE, curproc->ss);
   //      cprintf("after");
-        clearpteu(curproc->pgdir,  (char*)(curproc->ss - PGSIZE));
+  //      clearpteu(curproc->pgdir,  (char*)(curproc->ss - PGSIZE));
 	curproc->ss = curproc->ss - PGSIZE;
   	break;
-    //}
+    }
 
   //PAGEBREAK: 13
   default:
